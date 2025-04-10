@@ -90,15 +90,15 @@ To remove all Cosmic Theme Pack components:
 
 ## Credits
 
-Created by [Your Name]
+Created by Rajan with love
 
 ## License
 
-[License Type] - See LICENSE file for details
+MIT - See LICENSE file for details
 
 ## Support
 
 If you enjoy this theme pack, please consider:
 - Leaving a review
 - Sharing with friends
-- [Your support links/contact]
+- [rajanneupane202@gmail.com]
