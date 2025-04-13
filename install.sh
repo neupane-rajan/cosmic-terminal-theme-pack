@@ -125,6 +125,7 @@ fi
 # Create directories if they don't exist
 echo -e "${GREEN}Creating directories...${NC}"
 mkdir -p ~/.config/kitty/themes
+mkdir -p ~/.config/neofetch
 
 # For Fish shell features, create directories if Fish is installed
 if command -v fish &> /dev/null; then
@@ -134,7 +135,10 @@ fi
 
 # Install Kitty themes
 echo -e "${GREEN}Installing Kitty themes...${NC}"
-cp ./themes/kitty/*.conf ~/.config/kitty/themes/
+cp -v ./themes/kitty/*.conf ~/.config/kitty/themes/ || {
+    echo -e "${RED}Failed to copy Kitty themes. Check path and permissions.${NC}"
+    exit 1
+}
 
 # Check if include line exists in kitty.conf
 if [ -f ~/.config/kitty/kitty.conf ]; then
@@ -167,10 +171,32 @@ fi
 # Install Fish prompt and configuration if Fish is installed
 if command -v fish &> /dev/null; then
     echo -e "${GREEN}Installing Fish prompt and configuration...${NC}"
-    cp ./fish/functions/fish_prompt.fish ~/.config/fish/functions/
-    cp ./fish/functions/fish_right_prompt.fish ~/.config/fish/functions/
-    cp ./fish/conf.d/theme-colors.fish ~/.config/fish/conf.d/
-    cp ./fish/functions/cosmic_functions.fish ~/.config/fish/functions/
+    
+    # Copy function files and verify they were copied successfully
+    if cp -v ./fish/functions/fish_prompt.fish ~/.config/fish/functions/; then
+        echo -e "${GREEN}Successfully installed fish_prompt.fish${NC}"
+    else
+        echo -e "${RED}Failed to install fish_prompt.fish${NC}"
+    fi
+    
+    if cp -v ./fish/functions/fish_right_prompt.fish ~/.config/fish/functions/; then
+        echo -e "${GREEN}Successfully installed fish_right_prompt.fish${NC}"
+    else
+        echo -e "${RED}Failed to install fish_right_prompt.fish${NC}"
+    fi
+    
+    if cp -v ./fish/conf.d/theme-colors.fish ~/.config/fish/conf.d/; then
+        echo -e "${GREEN}Successfully installed theme-colors.fish${NC}"
+    else
+        echo -e "${RED}Failed to install theme-colors.fish${NC}"
+    fi
+    
+    if cp -v ./fish/functions/cosmic_functions.fish ~/.config/fish/functions/; then
+        echo -e "${GREEN}Successfully installed cosmic_functions.fish${NC}"
+        chmod +x ~/.config/fish/functions/cosmic_functions.fish
+    else
+        echo -e "${RED}Failed to install cosmic_functions.fish${NC}"
+    fi
     
     # Update Fish greeting
     cat > ~/.config/fish/functions/fish_greeting.fish << EOF
@@ -187,9 +213,152 @@ function fish_greeting
 end
 EOF
     
+    # Create a loader file to ensure cosmic_functions are loaded
+    cat > ~/.config/fish/conf.d/cosmic_loader.fish << EOF
+# Ensure cosmic functions are loaded
+if test -f "$HOME/.config/fish/functions/cosmic_functions.fish"
+    source "$HOME/.config/fish/functions/cosmic_functions.fish"
+end
+EOF
+    
     echo -e "${GREEN}Fish prompt and functions installed!${NC}"
 else
     echo -e "${YELLOW}Skipping Fish shell configuration (Fish not installed)${NC}"
+fi
+
+# Install neofetch config if neofetch is available
+if command -v neofetch &> /dev/null; then
+    echo -e "${GREEN}Setting up themed neofetch configuration...${NC}"
+    
+    # Create the themed neofetch config
+    cat > ~/.config/neofetch/config.cosmic.conf << EOF
+# Cosmic themed neofetch configuration
+
+# Get current theme from kitty config
+get_theme() {
+    if grep -q "include themes/nebula.conf" ~/.config/kitty/kitty.conf; then
+        echo "nebula"
+    elif grep -q "include themes/solar.conf" ~/.config/kitty/kitty.conf; then
+        echo "solar"
+    elif grep -q "include themes/forest.conf" ~/.config/kitty/kitty.conf; then
+        echo "forest"
+    elif grep -q "include themes/ocean.conf" ~/.config/kitty/kitty.conf; then
+        echo "ocean"
+    elif grep -q "include themes/midnight.conf" ~/.config/kitty/kitty.conf; then
+        echo "midnight"
+    else
+        echo "nebula" # Default
+    fi
+}
+
+# Set colors based on current theme
+theme=\$(get_theme)
+
+case \$theme in
+    nebula)
+        # Nebula theme colors
+        colors=(1 2 3 4 5 6 15)
+        ascii_colors=(4 4 8 4 4 7)
+        ;;
+    solar)
+        # Solar theme colors
+        colors=(1 2 3 4 5 6 7)
+        ascii_colors=(3 3 3 3 3 3)
+        ;;
+    forest)
+        # Forest theme colors
+        colors=(2 10 3 4 5 6 7)
+        ascii_colors=(2 2 10 2 2 10)
+        ;;
+    ocean)
+        # Ocean theme colors
+        colors=(4 4 3 4 5 6 7)
+        ascii_colors=(4 4 12 4 4 12)
+        ;;
+    midnight)
+        # Midnight theme colors
+        colors=(1 2 3 4 5 6 7)
+        ascii_colors=(4 4 4 4 4 7)
+        ;;
+    *)
+        # Default colors
+        colors=()
+        ascii_colors=()
+        ;;
+esac
+
+# Neofetch configuration
+print_info() {
+    info title
+    info underline
+    
+    info "OS" distro
+    info "Host" model
+    info "Kernel" kernel
+    info "Uptime" uptime
+    info "Packages" packages
+    info "Shell" shell
+    info "Terminal" term
+    info "CPU" cpu
+    info "Memory" memory
+    
+    info cols
+}
+
+# Output config
+title_fqdn="off"
+kernel_shorthand="on"
+distro_shorthand="off"
+os_arch="on"
+uptime_shorthand="on"
+memory_percent="on"
+memory_unit="gib"
+package_managers="on"
+shell_path="off"
+shell_version="on"
+cpu_brand="on"
+cpu_speed="on"
+cpu_cores="logical"
+cpu_temp="off"
+gpu_brand="on"
+gpu_type="all"
+refresh_rate="off"
+gtk_shorthand="off"
+bold="on"
+separator=" ➜"
+block_range=(0 15)
+color_blocks="on"
+block_width=3
+block_height=1
+bar_char_elapsed="-"
+bar_char_total="="
+bar_border="on"
+bar_length=15
+bar_color_elapsed="distro"
+bar_color_total="distro"
+cpu_display="off"
+memory_display="off"
+battery_display="off"
+disk_display="off"
+image_backend="ascii"
+image_source="auto"
+ascii_distro="auto"
+ascii_bold="on"
+gap=3
+EOF
+
+    # Create the cosmic-fetch command
+    cat > ~/.config/fish/functions/cosmic-fetch.fish << EOF
+function cosmic-fetch
+    neofetch --config ~/.config/neofetch/config.cosmic.conf \$argv
+end
+EOF
+    
+    echo -e "${GREEN}Neofetch theme configuration installed!${NC}"
+    echo -e "${BLUE}Use 'cosmic-fetch' command in Fish to run themed neofetch.${NC}"
+else
+    echo -e "${YELLOW}Neofetch not found. Skipping neofetch configuration.${NC}"
+    echo -e "${BLUE}To enable themed neofetch, install neofetch and run this script again.${NC}"
 fi
 
 # Completion
@@ -199,6 +368,7 @@ echo "  1. Restart Kitty terminal"
 
 if command -v fish &> /dev/null; then
     echo "  2. Start Fish shell with: fish"
+    echo "  3. Verify functions with: type theme sysinfo gstat"
 else
     echo "  2. Consider installing Fish shell for enhanced experience"
     echo "     Visit: https://fishshell.com/docs/current/index.html#installation"
