@@ -1,5 +1,5 @@
 #!/bin/bash
-# Cosmic Theme Pack Uninstaller
+# Enhanced Cosmic Theme Pack Uninstaller
 # This script completely removes the Cosmic theme pack and restores original configurations
 
 # Color codes for output
@@ -41,55 +41,124 @@ else
         sed -i '/include themes\/forest.conf/d' ~/.config/kitty/kitty.conf
         sed -i '/include themes\/ocean.conf/d' ~/.config/kitty/kitty.conf
         sed -i '/include themes\/midnight.conf/d' ~/.config/kitty/kitty.conf
+        sed -i '/include themes\/dark-neon.conf/d' ~/.config/kitty/kitty.conf
+        
+        # Remove font configuration added by cosmic
+        sed -i '/# Font configuration/d' ~/.config/kitty/kitty.conf
+        sed -i '/font_family JetBrainsMono Nerd Font/d' ~/.config/kitty/kitty.conf
+        sed -i '/bold_font auto/d' ~/.config/kitty/kitty.conf
+        sed -i '/italic_font auto/d' ~/.config/kitty/kitty.conf
+        sed -i '/bold_italic_font auto/d' ~/.config/kitty/kitty.conf
+        sed -i '/font_size 12.0/d' ~/.config/kitty/kitty.conf
     fi
 fi
 
-# Restore Fish prompt
-if [ -f ~/.config/fish/functions/fish_prompt.fish.cosmic.bak ]; then
-    echo -e "${GREEN}Restoring original fish_prompt.fish...${NC}"
-    mv ~/.config/fish/functions/fish_prompt.fish.cosmic.bak ~/.config/fish/functions/fish_prompt.fish
-fi
-
-# Restore Fish right prompt
-if [ -f ~/.config/fish/functions/fish_right_prompt.fish.cosmic.bak ]; then
-    echo -e "${GREEN}Restoring original fish_right_prompt.fish...${NC}"
-    mv ~/.config/fish/functions/fish_right_prompt.fish.cosmic.bak ~/.config/fish/functions/fish_right_prompt.fish
-fi
-
-# Remove Fish theme color configuration
-if [ -f ~/.config/fish/conf.d/theme-colors.fish ]; then
-    echo -e "${GREEN}Removing Fish theme color configuration...${NC}"
+# Clean up Fish shell configurations
+if command -v fish &> /dev/null; then
+    echo -e "${GREEN}Cleaning up Fish shell configurations...${NC}"
+    
+    # Remove custom Fish prompt files
+    rm -f ~/.config/fish/functions/fish_prompt.fish
+    rm -f ~/.config/fish/functions/fish_right_prompt.fish
+    rm -f ~/.config/fish/functions/fish_greeting.fish
+    rm -f ~/.config/fish/functions/cosmic_functions.fish
+    rm -f ~/.config/fish/functions/cosmic-fetch.fish
+    
+    # Remove theme color configurations
     rm -f ~/.config/fish/conf.d/theme-colors.fish
+    rm -f ~/.config/fish/conf.d/cosmic_loader.fish
+    
+    # Restore backups if they exist
+    if [ -f ~/.config/fish/functions/fish_prompt.fish.cosmic.bak ]; then
+        mv ~/.config/fish/functions/fish_prompt.fish.cosmic.bak ~/.config/fish/functions/fish_prompt.fish
+    fi
+    
+    if [ -f ~/.config/fish/functions/fish_right_prompt.fish.cosmic.bak ]; then
+        mv ~/.config/fish/functions/fish_right_prompt.fish.cosmic.bak ~/.config/fish/functions/fish_right_prompt.fish
+    fi
+    
+    if [ -f ~/.config/fish/functions/fish_greeting.fish.cosmic.bak ]; then
+        mv ~/.config/fish/functions/fish_greeting.fish.cosmic.bak ~/.config/fish/functions/fish_greeting.fish
+    fi
+    
+    # If no backup exists, create a simple default prompt for fish
+    if [ ! -f ~/.config/fish/functions/fish_prompt.fish ]; then
+        echo -e "${YELLOW}Creating default Fish prompt...${NC}"
+        echo 'function fish_prompt
+    set_color $fish_color_cwd
+    echo -n (prompt_pwd)
+    set_color normal
+    echo -n " > "
+end' > ~/.config/fish/functions/fish_prompt.fish
+    fi
+    
+    # Clear Fish universal variables related to colors
+    echo -e "${GREEN}Resetting Fish color variables...${NC}"
+    # This needs to be run in a fish shell instance
+    fish -c "
+    set -U fish_color_normal normal
+    set -U fish_color_command blue
+    set -U fish_color_quote yellow
+    set -U fish_color_redirection cyan
+    set -U fish_color_end green
+    set -U fish_color_error red
+    set -U fish_color_param cyan
+    set -U fish_color_comment red
+    set -U fish_color_match --background=brblue
+    set -U fish_color_selection white --bold --background=brblack
+    set -U fish_color_search_match bryellow --background=brblack
+    set -U fish_color_history_current --bold
+    set -U fish_color_operator brcyan
+    set -U fish_color_escape brcyan
+    set -U fish_color_cwd green
+    set -U fish_color_cwd_root red
+    set -U fish_color_valid_path --underline
+    set -U fish_color_autosuggestion 555
+    set -U fish_color_user brgreen
+    set -U fish_color_host normal
+    set -U fish_color_cancel -r
+    set -U fish_pager_color_prefix normal --bold --underline
+    set -U fish_pager_color_completion normal
+    set -U fish_pager_color_description B3A06D
+    set -U fish_pager_color_progress brwhite --background=cyan
+    set -U fish_pager_color_selected_background -r"
+    
+    echo -e "${GREEN}Fish shell configurations restored to defaults!${NC}"
 fi
 
-# Remove custom functions
-echo -e "${GREEN}Removing cosmic functions...${NC}"
-rm -f ~/.config/fish/functions/cosmic_functions.fish
+# Remove theme files and directories
+echo -e "${GREEN}Removing theme files...${NC}"
+rm -rf ~/.config/kitty/themes/nebula.conf
+rm -rf ~/.config/kitty/themes/solar.conf
+rm -rf ~/.config/kitty/themes/forest.conf
+rm -rf ~/.config/kitty/themes/ocean.conf
+rm -rf ~/.config/kitty/themes/midnight.conf
+rm -rf ~/.config/kitty/themes/dark-neon.conf
 
-# Remove theme directories
-echo -e "${GREEN}Removing theme directories...${NC}"
-rm -rf ~/.config/kitty/themes/cosmic
-# If themes directory is empty after removal, remove it too
+# If themes directory is empty, remove it
 if [ -d ~/.config/kitty/themes ] && [ -z "$(ls -A ~/.config/kitty/themes)" ]; then
     rmdir ~/.config/kitty/themes
 fi
 
-# Remove individual theme files that might be outside the cosmic directory
-echo -e "${GREEN}Removing individual theme files...${NC}"
-rm -f ~/.config/kitty/themes/nebula.conf
-rm -f ~/.config/kitty/themes/solar.conf
-rm -f ~/.config/kitty/themes/forest.conf
-rm -f ~/.config/kitty/themes/ocean.conf
-rm -f ~/.config/kitty/themes/midnight.conf
+# Clean up Neofetch configuration
+echo -e "${GREEN}Cleaning up Neofetch configurations...${NC}"
+rm -f ~/.config/neofetch/config.cosmic.conf
 
-# Check if fish has any cosmic-specific settings in config.fish
-if [ -f ~/.config/fish/config.fish ]; then
-    echo -e "${GREEN}Cleaning cosmic references from fish config...${NC}"
-    sed -i '/# Cosmic Theme Pack/d' ~/.config/fish/config.fish
-    sed -i '/source.*cosmic/d' ~/.config/fish/config.fish
+# Remove bash function for cosmic-fetch if it exists
+if [ -f ~/.cosmic-fetch ]; then
+    rm -f ~/.cosmic-fetch
 fi
 
-# Remove any empty directories created by the installation
+# Remove from .bashrc if present
+if [ -f ~/.bashrc ]; then
+    sed -i '/# Cosmic Theme Pack/d' ~/.bashrc
+    sed -i '/function cosmic-fetch()/d' ~/.bashrc
+    sed -i '/neofetch --config ~\/.config\/neofetch\/config.cosmic.conf/d' ~/.bashrc
+    sed -i '/}/d' ~/.bashrc
+    sed -i '/export -f cosmic-fetch/d' ~/.bashrc
+fi
+
+# Clean up empty directories
 echo -e "${GREEN}Cleaning up empty directories...${NC}"
 find ~/.config/fish/conf.d -type d -empty -delete 2>/dev/null
 find ~/.config/fish/functions -type d -empty -delete 2>/dev/null
