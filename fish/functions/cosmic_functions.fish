@@ -23,8 +23,12 @@ function theme
             sed -i '/include themes\/.*\.conf/d' ~/.config/kitty/kitty.conf
             echo "include themes/midnight.conf" >> ~/.config/kitty/kitty.conf
             echo "Theme switched to Midnight! Restart Kitty to apply."
+        case dark-neon
+            sed -i '/include themes\/.*\.conf/d' ~/.config/kitty/kitty.conf
+            echo "include themes/dark-neon.conf" >> ~/.config/kitty/kitty.conf
+            echo "Theme switched to Dark Neon! Restart Kitty to apply."
         case '*'
-            echo "Usage: theme [nebula|solar|forest|ocean|midnight]"
+            echo "Usage: theme [nebula|solar|forest|ocean|midnight|dark-neon]"
     end
 end
 
