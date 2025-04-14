@@ -1,6 +1,6 @@
 #!/bin/bash
 # Cosmic Neofetch Installer
-# This script installs custom neofetch configurations with ASCII art for Cosmic Themes
+# This standalone script installs custom neofetch configurations with ASCII art for Cosmic Themes
 
 # Color codes for output
 GREEN='\033[0;32m'
@@ -314,9 +314,11 @@ ascii_bold="on"
 gap=3
 EOF
 
-# Install fish function if Fish shell is available
+# Install shell function for cosmic-fetch based on detected shell
+echo -e "${GREEN}Creating shell function for cosmic-fetch...${NC}"
+
+# Check if Fish shell is installed
 if command -v fish &> /dev/null; then
-    echo -e "${GREEN}Creating Fish shell function for cosmic-fetch...${NC}"
     mkdir -p ~/.config/fish/functions
     
     cat > ~/.config/fish/functions/cosmic-fetch.fish << EOF
@@ -325,39 +327,36 @@ function cosmic-fetch
 end
 EOF
 
-    # Make it executable
     chmod +x ~/.config/fish/functions/cosmic-fetch.fish
-    
     echo -e "${GREEN}Fish function created successfully!${NC}"
     echo -e "${BLUE}Use 'cosmic-fetch' command in Fish to run themed neofetch.${NC}"
-else
-    echo -e "${YELLOW}Fish shell not detected. Creating bash function instead...${NC}"
-    
-    # Create bash function in .bashrc if it exists
-    if [ -f ~/.bashrc ]; then
-        if ! grep -q "function cosmic-fetch" ~/.bashrc; then
-            echo -e "\n# Cosmic Theme Pack" >> ~/.bashrc
-            echo "function cosmic-fetch() {" >> ~/.bashrc
-            echo "    neofetch --config ~/.config/neofetch/config.cosmic.conf \$@" >> ~/.bashrc
-            echo "}" >> ~/.bashrc
-            echo "export -f cosmic-fetch" >> ~/.bashrc
-            
-            echo -e "${GREEN}Bash function added to .bashrc${NC}"
-            echo -e "${BLUE}Use 'cosmic-fetch' command in Bash to run themed neofetch.${NC}"
-        else
-            echo -e "${BLUE}cosmic-fetch function already exists in .bashrc${NC}"
-        fi
-    else
-        echo -e "${YELLOW}Cannot find .bashrc, creating alias in new file...${NC}"
-        echo "function cosmic-fetch() {" > ~/.cosmic-fetch
-        echo "    neofetch --config ~/.config/neofetch/config.cosmic.conf \$@" >> ~/.cosmic-fetch
-        echo "}" >> ~/.cosmic-fetch
-        echo "export -f cosmic-fetch" >> ~/.cosmic-fetch
+fi
+
+# Always create bash function as a fallback
+if [ -f ~/.bashrc ]; then
+    if ! grep -q "function cosmic-fetch" ~/.bashrc; then
+        echo -e "\n# Cosmic Theme Pack" >> ~/.bashrc
+        echo "function cosmic-fetch() {" >> ~/.bashrc
+        echo "    neofetch --config ~/.config/neofetch/config.cosmic.conf \$@" >> ~/.bashrc
+        echo "}" >> ~/.bashrc
+        echo "export -f cosmic-fetch" >> ~/.bashrc
         
-        echo -e "${GREEN}Created ~/.cosmic-fetch${NC}"
-        echo -e "${BLUE}Source it with: source ~/.cosmic-fetch${NC}"
+        echo -e "${GREEN}Bash function added to .bashrc${NC}"
+        echo -e "${BLUE}Use 'cosmic-fetch' command in Bash to run themed neofetch.${NC}"
+    else
+        echo -e "${BLUE}cosmic-fetch function already exists in .bashrc${NC}"
     fi
+else
+    echo -e "${YELLOW}Cannot find .bashrc, creating alias in new file...${NC}"
+    echo "function cosmic-fetch() {" > ~/.cosmic-fetch
+    echo "    neofetch --config ~/.config/neofetch/config.cosmic.conf \$@" >> ~/.cosmic-fetch
+    echo "}" >> ~/.cosmic-fetch
+    echo "export -f cosmic-fetch" >> ~/.cosmic-fetch
+    
+    echo -e "${GREEN}Created ~/.cosmic-fetch${NC}"
+    echo -e "${BLUE}Source it with: source ~/.cosmic-fetch${NC}"
 fi
 
 echo -e "${GREEN}Installation complete!${NC}"
 echo -e "${BLUE}Use 'cosmic-fetch' command to see your themed neofetch display.${NC}"
+echo -e "${BLUE}Try switching themes with the theme command if you're using the Cosmic Theme Pack.${NC}"
