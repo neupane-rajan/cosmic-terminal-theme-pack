@@ -2,9 +2,8 @@
 
 A beautiful collection of terminal themes for Kitty terminal emulator and Fish shell, designed to enhance your Linux terminal experience with modern aesthetics and powerful functionality.
 
-![Cosmic Themes Preview](screenshots/cosmic-themes-preview.png)
 
-## Features
+
 
 ### Beautiful Themes
 
@@ -42,18 +41,6 @@ Each theme features a carefully crafted color palette to create a cohesive visua
 - Simple theme switching via command or utility script
 - Clean uninstallation option that preserves your original configuration
 
-## Screenshots
-
-### Nebula Theme
-![Nebula Theme](screenshots/nebula-theme.png)
-
-### Solar Theme
-![Solar Theme](screenshots/solar-theme.png)
-
-### Forest Theme
-![Forest Theme](screenshots/forest-theme.png)
-
-## Requirements
 
 - [Kitty Terminal Emulator](https://sw.kovidgoyal.net/kitty/) - A fast, feature-rich GPU-based terminal
 - [Fish Shell](https://fishshell.com/) - A smart and user-friendly command line shell
@@ -65,7 +52,7 @@ Each theme features a carefully crafted color palette to create a cohesive visua
 
 1. Clone or download the repository:
    ```bash
-   git clone https://github.com/yourusername/cosmic-terminal-theme-pack.git
+   git clone https://github.com/neupane-rajan/cosmic-terminal-theme-pack.git
    # or unzip the downloaded zip file
    unzip cosmic-terminal-theme-pack.zip
    ```
@@ -239,4 +226,4 @@ If you enjoy this theme pack, consider:
 
 For questions or support:
 - Email: rajanneupane202@gmail.com
-- GitHub Issues: [Report an issue](https://github.com/yourusername/cosmic-terminal-theme-pack/issues)
+- GitHub Issues: [Report an issue](https://github.com/neupane-rajan/cosmic-terminal-theme-pack/issues)
