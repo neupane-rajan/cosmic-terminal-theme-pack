@@ -70,9 +70,7 @@ if [ -d ~/.config/kitty/themes ] && [ -z "$(ls -A ~/.config/kitty/themes)" ]; th
     rmdir ~/.config/kitty/themes
 fi
 
-# Clean up Neofetch configuration
-echo -e "${GREEN}Cleaning up Neofetch configurations...${NC}"
-rm -f ~/.config/neofetch/config.cosmic.conf
+
 
 # Remove bash function for cosmic-fetch if it exists
 if [ -f ~/.cosmic-fetch ]; then
@@ -82,10 +80,8 @@ fi
 # Remove from .bashrc if present
 if [ -f ~/.bashrc ]; then
     sed -i '/# Cosmic Theme Pack/d' ~/.bashrc
-    sed -i '/function cosmic-fetch()/d' ~/.bashrc
     sed -i '/cosmic-fetch()/d' ~/.bashrc
     sed -i '/~\/.config\/fastfetch\/run-cosmic.sh/d' ~/.bashrc
-    sed -i '/neofetch --config ~\/.config\/neofetch\/config.cosmic.conf/d' ~/.bashrc
     sed -i '/export -f cosmic-fetch/d' ~/.bashrc
 fi
 
