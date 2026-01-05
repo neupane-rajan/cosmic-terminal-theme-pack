@@ -14,50 +14,82 @@ echo -e "${BLUE}================================================${NC}"
 echo -e "${BLUE}       Cosmic Fastfetch Installer${NC}"
 echo -e "${BLUE}================================================${NC}"
 
-# Check if fastfetch is installed
+# Function to check and install dependencies
+check_dependency() {
+    local cmd=$1
+    local name=$2
+    
+    if ! command -v "$cmd" &> /dev/null; then
+        echo -e "${YELLOW}$name is not installed.${NC}"
+        read -p "Would you like to install $name? (y/n): " -n 1 -r
+        echo
+        
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo -e "${GREEN}Installing $name...${NC}"
+            if [ -f /etc/debian_version ]; then
+                sudo apt-get update && sudo apt-get install -y "$cmd"
+            elif [ -f /etc/fedora-release ]; then
+                sudo dnf install -y "$cmd"
+            elif [ -f /etc/arch-release ]; then
+                sudo pacman -S --noconfirm "$cmd"
+            elif [ -f /etc/redhat-release ]; then
+                sudo dnf install -y "$cmd"
+            elif command -v brew &> /dev/null; then
+                brew install "$cmd"
+            else
+                echo -e "${RED}Could not automatically install $name. Please install it manually.${NC}"
+            fi
+        else
+            echo -e "${BLUE}Skipping $name installation. Some features may not work.${NC}"
+        fi
+    else
+        echo -e "${GREEN}$name is already installed.${NC}"
+    fi
+}
+
+# Check for required tools
+echo -e "${BLUE}Checking system dependencies...${NC}"
+
+# Check for Git
+check_dependency "git" "Git"
+
+# Check for Curl
+check_dependency "curl" "cURL"
+
+# Check for Unzip
+check_dependency "unzip" "Unzip"
+
+# Check for Kitty
+check_dependency "kitty" "Kitty Terminal"
+
+# Check for Fastfetch (Special handling for PPA on Ubuntu)
 if ! command -v fastfetch &> /dev/null; then
-    echo -e "${YELLOW}Fastfetch is not installed. Would you like to install it?${NC}"
-    read -p "Install Fastfetch? (y/n): " -n 1 -r
+    echo -e "${YELLOW}Fastfetch is not installed.${NC}"
+    read -p "Would you like to install Fastfetch? (y/n): " -n 1 -r
     echo
     
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo -e "${GREEN}Attempting to install Fastfetch...${NC}"
-        
-        # Detect OS and install Fastfetch accordingly
+        echo -e "${GREEN}Installing Fastfetch...${NC}"
         if [ -f /etc/debian_version ]; then
-            # Debian/Ubuntu (requires adding PPA or downloading deb, depending on version)
-            # This is a basic attempt
-            sudo add-apt-repository -y ppa:zhangjianguang/fastfetch
+            if ! grep -q "zhangjianguang/fastfetch" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+                sudo add-apt-repository -y ppa:zhangjianguang/fastfetch
+            fi
             sudo apt-get update
             sudo apt-get install -y fastfetch
         elif [ -f /etc/fedora-release ]; then
-            # Fedora
             sudo dnf install -y fastfetch
         elif [ -f /etc/arch-release ]; then
-            # Arch Linux
             sudo pacman -S --noconfirm fastfetch
         elif [ -f /etc/redhat-release ]; then
-            # CentOS/RHEL
             sudo dnf install -y fastfetch
         elif command -v brew &> /dev/null; then
-            # macOS with Homebrew
             brew install fastfetch
         else
-            echo -e "${RED}Could not automatically install Fastfetch${NC}"
-            echo -e "${YELLOW}Please install Fastfetch manually and run this script again.${NC}"
-            exit 1
-        fi
-        
-        # Verify installation
-        if ! command -v fastfetch &> /dev/null; then
-            echo -e "${RED}Fastfetch installation failed.${NC}"
-            exit 1
-        else
-            echo -e "${GREEN}Fastfetch installed successfully!${NC}"
+            echo -e "${RED}Could not automatically install Fastfetch.${NC}"
         fi
     else
-        echo -e "${YELLOW}Exiting - Fastfetch is required for this script.${NC}"
-        exit 0
+        echo -e "${RED}Fastfetch is required for this theme pack.${NC}"
+        exit 1
     fi
 fi
 
