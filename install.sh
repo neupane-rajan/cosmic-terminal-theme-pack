@@ -70,7 +70,6 @@ fi
 # Create directories if they don't exist
 echo -e "${GREEN}Creating directories...${NC}"
 mkdir -p ~/.config/kitty/themes
-mkdir -p ~/.config/neofetch
 
 
 
@@ -111,24 +110,24 @@ fi
 
 
 
-# Check if neofetch installation is desired
-echo -e "${BLUE}Would you like to install the themed neofetch configuration?${NC}"
-read -p "Install themed neofetch? (y/n): " -n 1 -r
+# Check if fastfetch installation is desired
+echo -e "${BLUE}Would you like to install the Fastfetch configuration?${NC}"
+read -p "Install Fastfetch setup? (y/n): " -n 1 -r
 echo
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo -e "${GREEN}Starting neofetch installer...${NC}"
+    echo -e "${GREEN}Starting Fastfetch installer...${NC}"
     
-    # Check if install-neofetch-cosmic.sh exists and is executable
-    if [ -f ./install-neofetch-cosmic.sh ] && [ -x ./install-neofetch-cosmic.sh ]; then
-        # Run the neofetch installer
-        ./install-neofetch-cosmic.sh
+    # Check if install-cosmic-fastfetch.sh exists and is executable
+    if [ -f ./install-cosmic-fastfetch.sh ] && [ -x ./install-cosmic-fastfetch.sh ]; then
+        # Run the fastfetch installer
+        ./install-cosmic-fastfetch.sh
     else
-        echo -e "${YELLOW}Neofetch installer script not found or not executable.${NC}"
-        echo -e "${BLUE}You can run it later with: ./install-neofetch-cosmic.sh${NC}"
+        echo -e "${YELLOW}Fastfetch installer script not found or not executable.${NC}"
+        echo -e "${BLUE}You can run it later with: ./install-cosmic-fastfetch.sh${NC}"
     fi
 else
-    echo -e "${BLUE}Skipping neofetch installation.${NC}"
+    echo -e "${BLUE}Skipping Fastfetch installation.${NC}"
 fi
 
 # Completion
