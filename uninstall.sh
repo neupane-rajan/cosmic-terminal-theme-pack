@@ -53,78 +53,7 @@ else
     fi
 fi
 
-# Clean up Fish shell configurations
-if command -v fish &> /dev/null; then
-    echo -e "${GREEN}Cleaning up Fish shell configurations...${NC}"
-    
-    # Remove custom Fish prompt files
-    rm -f ~/.config/fish/functions/fish_prompt.fish
-    rm -f ~/.config/fish/functions/fish_right_prompt.fish
-    rm -f ~/.config/fish/functions/fish_greeting.fish
-    rm -f ~/.config/fish/functions/cosmic_functions.fish
-    rm -f ~/.config/fish/functions/cosmic-fetch.fish
-    
-    # Remove theme color configurations
-    rm -f ~/.config/fish/conf.d/theme-colors.fish
-    rm -f ~/.config/fish/conf.d/cosmic_loader.fish
-    
-    # Restore backups if they exist
-    if [ -f ~/.config/fish/functions/fish_prompt.fish.cosmic.bak ]; then
-        mv ~/.config/fish/functions/fish_prompt.fish.cosmic.bak ~/.config/fish/functions/fish_prompt.fish
-    fi
-    
-    if [ -f ~/.config/fish/functions/fish_right_prompt.fish.cosmic.bak ]; then
-        mv ~/.config/fish/functions/fish_right_prompt.fish.cosmic.bak ~/.config/fish/functions/fish_right_prompt.fish
-    fi
-    
-    if [ -f ~/.config/fish/functions/fish_greeting.fish.cosmic.bak ]; then
-        mv ~/.config/fish/functions/fish_greeting.fish.cosmic.bak ~/.config/fish/functions/fish_greeting.fish
-    fi
-    
-    # If no backup exists, create a simple default prompt for fish
-    if [ ! -f ~/.config/fish/functions/fish_prompt.fish ]; then
-        echo -e "${YELLOW}Creating default Fish prompt...${NC}"
-        echo 'function fish_prompt
-    set_color $fish_color_cwd
-    echo -n (prompt_pwd)
-    set_color normal
-    echo -n " > "
-end' > ~/.config/fish/functions/fish_prompt.fish
-    fi
-    
-    # Clear Fish universal variables related to colors
-    echo -e "${GREEN}Resetting Fish color variables...${NC}"
-    # This needs to be run in a fish shell instance
-    fish -c "
-    set -U fish_color_normal normal
-    set -U fish_color_command blue
-    set -U fish_color_quote yellow
-    set -U fish_color_redirection cyan
-    set -U fish_color_end green
-    set -U fish_color_error red
-    set -U fish_color_param cyan
-    set -U fish_color_comment red
-    set -U fish_color_match --background=brblue
-    set -U fish_color_selection white --bold --background=brblack
-    set -U fish_color_search_match bryellow --background=brblack
-    set -U fish_color_history_current --bold
-    set -U fish_color_operator brcyan
-    set -U fish_color_escape brcyan
-    set -U fish_color_cwd green
-    set -U fish_color_cwd_root red
-    set -U fish_color_valid_path --underline
-    set -U fish_color_autosuggestion 555
-    set -U fish_color_user brgreen
-    set -U fish_color_host normal
-    set -U fish_color_cancel -r
-    set -U fish_pager_color_prefix normal --bold --underline
-    set -U fish_pager_color_completion normal
-    set -U fish_pager_color_description B3A06D
-    set -U fish_pager_color_progress brwhite --background=cyan
-    set -U fish_pager_color_selected_background -r"
-    
-    echo -e "${GREEN}Fish shell configurations restored to defaults!${NC}"
-fi
+
 
 # Remove theme files and directories
 echo -e "${GREEN}Removing theme files...${NC}"
@@ -160,8 +89,7 @@ fi
 
 # Clean up empty directories
 echo -e "${GREEN}Cleaning up empty directories...${NC}"
-find ~/.config/fish/conf.d -type d -empty -delete 2>/dev/null
-find ~/.config/fish/functions -type d -empty -delete 2>/dev/null
+
 
 # Final message
 echo -e "${GREEN}Uninstallation complete!${NC}"

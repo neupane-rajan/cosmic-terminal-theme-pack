@@ -150,17 +150,7 @@ cp fastfetch-config.jsonc ~/.config/fastfetch/config.jsonc
 # Install shell function for cosmic-fetch
 echo -e "${GREEN}Configuring shell integration...${NC}"
 
-# Fish Shell
-if command -v fish &> /dev/null; then
-    mkdir -p ~/.config/fish/functions
-    cat > ~/.config/fish/functions/cosmic-fetch.fish << EOF
-function cosmic-fetch
-    ~/.config/fastfetch/run-cosmic.sh \$argv
-end
-EOF
-    chmod +x ~/.config/fish/functions/cosmic-fetch.fish
-    echo -e "${GREEN}Fish function updated!${NC}"
-fi
+
 
 # Bash Shell
 if [ -f ~/.bashrc ]; then

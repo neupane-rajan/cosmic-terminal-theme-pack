@@ -42,7 +42,7 @@ Each theme features a carefully crafted color palette to create a cohesive visua
 - Clean uninstallation option that preserves your original configuration
 
 - [Kitty Terminal Emulator](https://sw.kovidgoyal.net/kitty/) - A fast, feature-rich GPU-based terminal
-- Shells: **Bash**, **Zsh**, or [Fish Shell](https://fishshell.com/)
+- Shells: **Bash** or **Zsh**
 - A [Nerd Font](https://www.nerdfonts.com/) - Required for prompt icons
 
 ## Installation
@@ -122,7 +122,7 @@ Run the theme switcher utility:
 
 Follow the interactive prompts to select your desired theme.
 
-#### Using the Fish Function
+#### Using the Theme Script
 
 If you're using Fish shell, simply type:
 
@@ -138,7 +138,7 @@ theme cyberpunk # Switch to Cyberpunk theme
 
 ### Utility Functions
 
-The Cosmic Theme Pack includes several useful utility functions for Fish shell:
+The Cosmic Theme Pack includes several useful utility functions:
 
 - **System Information**:
 
@@ -173,24 +173,6 @@ nano ~/.config/kitty/themes/nebula.conf
 ```
 
 Changes will take effect when you restart Kitty or reload the configuration with `ctrl+shift+F5`.
-
-### Adjusting the Fish Prompt
-
-Modify the Fish prompt appearance by editing:
-
-```bash
-nano ~/.config/fish/functions/fish_prompt.fish
-```
-
-You can change colors, symbols, and layout to match your preferences.
-
-### Adding Custom Functions
-
-Create your own Fish functions to extend the theme pack:
-
-```bash
-nano ~/.config/fish/functions/my_function.fish
-```
 
 ## Uninstallation
 

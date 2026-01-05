@@ -12,62 +12,7 @@ echo -e "${BLUE}================================================${NC}"
 echo -e "${BLUE}       Cosmic Theme Pack Installer${NC}"
 echo -e "${BLUE}================================================${NC}"
 
-# Check if Fish shell is installed
-if ! command -v fish &> /dev/null; then
-    echo -e "${YELLOW}Fish shell is not installed on your system.${NC}"
-    echo -e "${BLUE}Fish shell is recommended for the full Cosmic Theme experience.${NC}"
-    echo -e "${BLUE}Would you like to install Fish shell?${NC}"
-    read -p "Install Fish shell? (y/n): " -n 1 -r
-    echo
-    
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo -e "${GREEN}Attempting to install Fish shell...${NC}"
-        
-        # Detect OS and install Fish accordingly
-        if [ -f /etc/debian_version ]; then
-            # Debian/Ubuntu
-            echo -e "${BLUE}Detected Debian/Ubuntu system${NC}"
-            sudo apt-get update
-            sudo apt-get install -y fish
-        elif [ -f /etc/fedora-release ]; then
-            # Fedora
-            echo -e "${BLUE}Detected Fedora system${NC}"
-            sudo dnf install -y fish
-        elif [ -f /etc/arch-release ]; then
-            # Arch Linux
-            echo -e "${BLUE}Detected Arch Linux system${NC}"
-            sudo pacman -S --noconfirm fish
-        elif [ -f /etc/redhat-release ]; then
-            # CentOS/RHEL
-            echo -e "${BLUE}Detected CentOS/RHEL system${NC}"
-            sudo yum install -y fish
-        elif command -v brew &> /dev/null; then
-            # macOS with Homebrew
-            echo -e "${BLUE}Detected macOS with Homebrew${NC}"
-            brew install fish
-        else
-            echo -e "${RED}Could not automatically install Fish shell${NC}"
-            echo -e "${YELLOW}Please install Fish shell manually:${NC}"
-            echo -e "${BLUE}Visit: https://fishshell.com/docs/current/index.html#installation${NC}"
-            echo -e "${BLUE}After installing Fish, run this script again.${NC}"
-            exit 1
-        fi
-        
-        # Verify installation
-        if ! command -v fish &> /dev/null; then
-            echo -e "${RED}Fish shell installation failed.${NC}"
-            echo -e "${YELLOW}Please install Fish shell manually:${NC}"
-            echo -e "${BLUE}Visit: https://fishshell.com/docs/current/index.html#installation${NC}"
-            echo -e "${BLUE}After installing Fish, run this script again.${NC}"
-            exit 1
-        else
-            echo -e "${GREEN}Fish shell installed successfully!${NC}"
-        fi
-    else
-        echo -e "${YELLOW}Continuing without Fish shell...${NC}"
-        echo -e "${BLUE}Note: Some features will be limited to Kitty terminal only.${NC}"
-    fi
-fi
+
 
 # Check for Nerd Fonts
 echo -e "${BLUE}Checking for Nerd Fonts...${NC}"
@@ -127,11 +72,7 @@ echo -e "${GREEN}Creating directories...${NC}"
 mkdir -p ~/.config/kitty/themes
 mkdir -p ~/.config/neofetch
 
-# For Fish shell features, create directories if Fish is installed
-if command -v fish &> /dev/null; then
-    mkdir -p ~/.config/fish/functions
-    mkdir -p ~/.config/fish/conf.d
-fi
+
 
 # Install Kitty themes
 echo -e "${GREEN}Installing Kitty themes...${NC}"
@@ -168,63 +109,7 @@ if [ "$found_nerd_font" = true ] || [[ $REPLY =~ ^[Yy]$ ]]; then
     fi
 fi
 
-# Install Fish prompt and configuration if Fish is installed
-if command -v fish &> /dev/null; then
-    echo -e "${GREEN}Installing Fish prompt and configuration...${NC}"
-    
-    # Copy function files and verify they were copied successfully
-    if cp -v ./fish/functions/fish_prompt.fish ~/.config/fish/functions/; then
-        echo -e "${GREEN}Successfully installed fish_prompt.fish${NC}"
-    else
-        echo -e "${RED}Failed to install fish_prompt.fish${NC}"
-    fi
-    
-    if cp -v ./fish/functions/fish_right_prompt.fish ~/.config/fish/functions/; then
-        echo -e "${GREEN}Successfully installed fish_right_prompt.fish${NC}"
-    else
-        echo -e "${RED}Failed to install fish_right_prompt.fish${NC}"
-    fi
-    
-    if cp -v ./fish/conf.d/theme-colors.fish ~/.config/fish/conf.d/; then
-        echo -e "${GREEN}Successfully installed theme-colors.fish${NC}"
-    else
-        echo -e "${RED}Failed to install theme-colors.fish${NC}"
-    fi
-    
-    if cp -v ./fish/functions/cosmic_functions.fish ~/.config/fish/functions/; then
-        echo -e "${GREEN}Successfully installed cosmic_functions.fish${NC}"
-        chmod +x ~/.config/fish/functions/cosmic_functions.fish
-    else
-        echo -e "${RED}Failed to install cosmic_functions.fish${NC}"
-    fi
-    
-    # Update Fish greeting
-    cat > ~/.config/fish/functions/fish_greeting.fish << EOF
-function fish_greeting
-    set_color '#29d398'
-    echo "╭───── Welcome to Cosmic Terminal ─────╮"
-    set_color '#26bbd9'
-    echo "  Type 'theme' to change themes"
-    echo "  Type 'sysinfo' to see system info"
-    echo "  Type 'gstat' to see git status"
-    set_color '#29d398'
-    echo "╰─────────────────────────────────────╯"
-    set_color normal
-end
-EOF
-    
-    # Create a loader file to ensure cosmic_functions are loaded
-    cat > ~/.config/fish/conf.d/cosmic_loader.fish << EOF
-# Ensure cosmic functions are loaded
-if test -f "$HOME/.config/fish/functions/cosmic_functions.fish"
-    source "$HOME/.config/fish/functions/cosmic_functions.fish"
-end
-EOF
-    
-    echo -e "${GREEN}Fish prompt and functions installed!${NC}"
-else
-    echo -e "${YELLOW}Skipping Fish shell configuration (Fish not installed)${NC}"
-fi
+
 
 # Check if neofetch installation is desired
 echo -e "${BLUE}Would you like to install the themed neofetch configuration?${NC}"
@@ -251,40 +136,8 @@ echo -e "${GREEN}Installation complete!${NC}"
 echo -e "${BLUE}To apply the theme:${NC}"
 echo "  1. Restart Kitty terminal"
 
-if command -v fish &> /dev/null; then
-    echo "  2. Start Fish shell with: fish"
-    echo "  3. Verify functions with: type theme sysinfo gstat"
-else
-    echo "  2. Consider installing Fish shell for enhanced experience"
-    echo "     Visit: https://fishshell.com/docs/current/index.html#installation"
-fi
+
 
 echo -e "${BLUE}Enjoy your new Cosmic theme pack!${NC}"
 
 # Offer to set Fish as default shell if installed but not default
-if command -v fish &> /dev/null && [ "$SHELL" != "$(which fish)" ]; then
-    echo
-    echo -e "${BLUE}Would you like to set Fish as your default shell?${NC}"
-    read -p "Set Fish as default shell? (y/n): " -n 1 -r
-    echo
-    
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        # Get Fish shell path
-        FISH_PATH=$(which fish)
-        
-        # Check if Fish is in /etc/shells
-        if ! grep -q "$FISH_PATH" /etc/shells; then
-            echo -e "${YELLOW}Adding Fish to /etc/shells...${NC}"
-            echo "$FISH_PATH" | sudo tee -a /etc/shells > /dev/null
-        fi
-        
-        # Change default shell
-        echo -e "${GREEN}Changing default shell to Fish...${NC}"
-        chsh -s "$FISH_PATH"
-        
-        echo -e "${GREEN}Fish is now your default shell!${NC}"
-        echo -e "${BLUE}Please log out and log back in for changes to take effect.${NC}"
-    else
-        echo -e "${BLUE}You can manually switch to Fish shell by typing 'fish' in your terminal.${NC}"
-    fi
-fi
