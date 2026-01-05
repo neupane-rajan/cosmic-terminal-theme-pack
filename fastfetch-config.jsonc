@@ -64,6 +64,10 @@
       "key": "RAM  "
     },
     "break",
+    {
+        "type": "custom",
+        "format": "Shortcuts: cosmic-fetch (Show) | cosmic-theme (Switch)"
+    },
     "colors"
   ]
 }

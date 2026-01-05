@@ -210,7 +210,9 @@ if [ -f ~/.bashrc ]; then
         echo "    ~/.config/fastfetch/run-cosmic.sh \$@" >> ~/.bashrc
         echo "}" >> ~/.bashrc
         echo "export -f cosmic-fetch" >> ~/.bashrc
-        echo -e "${GREEN}Bash function added to .bashrc${NC}"
+        # Add alias for theme switcher
+        echo "alias cosmic-theme='~/.config/fastfetch/theme-switch.sh'" >> ~/.bashrc
+        echo -e "${GREEN}Bash function and alias added to .bashrc${NC}"
     else
         echo -e "${BLUE}cosmic-fetch function already exists in .bashrc.${NC}"
     fi
@@ -220,6 +222,7 @@ else
     echo "    ~/.config/fastfetch/run-cosmic.sh \$@" >> ~/.cosmic-fetch
     echo "}" >> ~/.cosmic-fetch
     echo "export -f cosmic-fetch" >> ~/.cosmic-fetch
+    echo "alias cosmic-theme='~/.config/fastfetch/theme-switch.sh'" >> ~/.cosmic-fetch
     echo -e "${GREEN}Created ~/.cosmic-fetch for manual sourcing${NC}"
 fi
 
@@ -230,7 +233,9 @@ if [ -f ~/.zshrc ]; then
         echo "cosmic-fetch() {" >> ~/.zshrc
         echo "    ~/.config/fastfetch/run-cosmic.sh \"\$@\"" >> ~/.zshrc
         echo "}" >> ~/.zshrc
-        echo -e "${GREEN}Zsh function added to .zshrc${NC}"
+        # Add alias for theme switcher
+        echo "alias cosmic-theme='~/.config/fastfetch/theme-switch.sh'" >> ~/.zshrc
+        echo -e "${GREEN}Zsh function and alias added to .zshrc${NC}"
     else
         echo -e "${BLUE}cosmic-fetch function already exists in .zshrc.${NC}"
     fi
@@ -241,8 +246,13 @@ elif command -v zsh &> /dev/null; then
     echo "cosmic-fetch() {" >> ~/.zshrc
     echo "    ~/.config/fastfetch/run-cosmic.sh \"\$@\"" >> ~/.zshrc
     echo "}" >> ~/.zshrc
+    echo "alias cosmic-theme='~/.config/fastfetch/theme-switch.sh'" >> ~/.zshrc
     echo -e "${GREEN}Created .zshrc and added function${NC}"
 fi
+
+# Copy theme-switch.sh to config dir for reliability
+cp theme-switch.sh ~/.config/fastfetch/theme-switch.sh
+chmod +x ~/.config/fastfetch/theme-switch.sh
 
 
 echo -e "${GREEN}Installation complete!${NC}"
