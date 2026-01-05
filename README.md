@@ -2,9 +2,6 @@
 
 A beautiful collection of terminal themes for Kitty terminal emulator and Fish shell, designed to enhance your Linux terminal experience with modern aesthetics and powerful functionality.
 
-
-
-
 ### Beautiful Themes
 
 Each theme features a carefully crafted color palette to create a cohesive visual experience:
@@ -14,16 +11,19 @@ Each theme features a carefully crafted color palette to create a cohesive visua
 - **Forest** - Nature-inspired dark theme with soothing green tones
 - **Ocean** - Deep blue/teal theme evoking tranquil ocean depths
 - **Midnight** - Deep dark theme with rich purples for late-night coding sessions
+- **Cyberpunk** - High-contrast Neon Pink/Purple/Yellow for a futuristic look
 
 ### Enhanced Shell Experience
 
 - **Two-line Fish Prompt**
+
   - Stylish two-line prompt with decorative frames
   - Git branch and status integration with visual indicators
   - Command execution status with color coding
   - Nerd Font icons for visual enhancement
 
 - **Informative Right Prompt**
+
   - Command execution time display
   - Current time indicator
   - Auto-scaling time format (seconds/minutes/hours)
@@ -41,16 +41,16 @@ Each theme features a carefully crafted color palette to create a cohesive visua
 - Simple theme switching via command or utility script
 - Clean uninstallation option that preserves your original configuration
 
-
 - [Kitty Terminal Emulator](https://sw.kovidgoyal.net/kitty/) - A fast, feature-rich GPU-based terminal
-- [Fish Shell](https://fishshell.com/) - A smart and user-friendly command line shell
-- A [Nerd Font](https://www.nerdfonts.com/) - Required for prompt icons (automatically installed if desired)
+- Shells: **Bash**, **Zsh**, or [Fish Shell](https://fishshell.com/)
+- A [Nerd Font](https://www.nerdfonts.com/) - Required for prompt icons
 
 ## Installation
 
 ### Quick Install
 
 1. Clone or download the repository:
+
    ```bash
    git clone https://github.com/neupane-rajan/cosmic-terminal-theme-pack.git
    # or unzip the downloaded zip file
@@ -58,14 +58,23 @@ Each theme features a carefully crafted color palette to create a cohesive visua
    ```
 
 2. Navigate to the project directory:
+
    ```bash
    cd cosmic-terminal-theme-pack
    ```
 
 3. Make the installation script executable and run it:
+
    ```bash
    chmod +x install.sh
    ./install.sh
+   ```
+
+   To install the **Fastfetch** implementation (Recommended):
+
+   ```bash
+   chmod +x install-cosmic-fastfetch.sh
+   ./install-cosmic-fastfetch.sh
    ```
 
 4. Follow the on-screen prompts to complete installation.
@@ -80,12 +89,14 @@ Each theme features a carefully crafted color palette to create a cohesive visua
 If you prefer to install components individually:
 
 1. Copy theme files:
+
    ```bash
    mkdir -p ~/.config/kitty/themes
    cp themes/kitty/*.conf ~/.config/kitty/themes/
    ```
 
 2. Add the theme to your Kitty configuration:
+
    ```bash
    echo "include themes/nebula.conf" >> ~/.config/kitty/kitty.conf
    ```
@@ -104,6 +115,7 @@ If you prefer to install components individually:
 #### Using the Theme Script
 
 Run the theme switcher utility:
+
 ```bash
 ./theme-switch.sh
 ```
@@ -113,12 +125,15 @@ Follow the interactive prompts to select your desired theme.
 #### Using the Fish Function
 
 If you're using Fish shell, simply type:
+
 ```bash
 theme nebula    # Switch to Nebula theme
 theme solar     # Switch to Solar theme
 theme forest    # Switch to Forest theme
 theme ocean     # Switch to Ocean theme
 theme midnight  # Switch to Midnight theme
+theme cyberpunk # Switch to Cyberpunk theme
+
 ```
 
 ### Utility Functions
@@ -126,15 +141,19 @@ theme midnight  # Switch to Midnight theme
 The Cosmic Theme Pack includes several useful utility functions for Fish shell:
 
 - **System Information**:
+
   ```bash
   sysinfo
   ```
+
   Displays formatted system information including OS, hostname, uptime, and hardware details.
 
 - **Enhanced Directory Listing**:
+
   ```bash
   ll
   ```
+
   Provides a visually enhanced version of the standard `ls -la` command.
 
 - **Git Status**:
@@ -188,12 +207,14 @@ This will remove all theme files but preserve your original configurations.
 ### Missing Icons
 
 If prompt icons appear as boxes or question marks:
+
 - Ensure you have a Nerd Font installed and configured in Kitty
 - Run the installer again and select "Yes" when asked to install Nerd Fonts
 
 ### Theme Not Applying
 
 If the theme doesn't change after switching:
+
 - Restart Kitty terminal completely
 - Check your kitty.conf file to ensure the theme include line exists
 - Verify that theme files are present in ~/.config/kitty/themes/
@@ -219,11 +240,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 If you enjoy this theme pack, consider:
+
 - Starring the repository on GitHub
 - Sharing with friends and colleagues
 - Reporting any issues you encounter
 - Contributing improvements or additional themes
 
 For questions or support:
+
 - Email: rajanneupane202@gmail.com
 - GitHub Issues: [Report an issue](https://github.com/neupane-rajan/cosmic-terminal-theme-pack/issues)
