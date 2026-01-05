@@ -27,10 +27,11 @@ echo "3) Forest (Green nature-inspired theme)"
 echo "4) Ocean (Blue oceanic theme)"
 echo "5) Midnight (Deep dark theme)"
 echo "6) Dark Neon (Cyberpunk-inspired neon theme)"
+echo "7) Cyberpunk (High-contrast neon theme)"
 echo
 
 # Get user selection
-read -p "Enter theme number (1-6): " theme_number
+read -p "Enter theme number (1-7): " theme_number
 echo
 
 # Set theme file based on selection
@@ -59,6 +60,10 @@ case $theme_number in
         theme_file="dark-neon.conf"
         theme_name="Dark Neon"
         ;;
+    7)
+        theme_file="cyberpunk.conf"
+        theme_name="Cyberpunk"
+        ;;
     *)
         echo -e "${YELLOW}Invalid selection. Exiting.${NC}"
         exit 1
@@ -72,6 +77,7 @@ sed -i '/include themes\/forest.conf/d' ~/.config/kitty/kitty.conf
 sed -i '/include themes\/ocean.conf/d' ~/.config/kitty/kitty.conf
 sed -i '/include themes\/midnight.conf/d' ~/.config/kitty/kitty.conf
 sed -i '/include themes\/dark-neon.conf/d' ~/.config/kitty/kitty.conf
+sed -i '/include themes\/cyberpunk.conf/d' ~/.config/kitty/kitty.conf
 
 # Ensure Cosmic Theme Pack marker exists
 if ! grep -q "# Cosmic Theme Pack" ~/.config/kitty/kitty.conf; then

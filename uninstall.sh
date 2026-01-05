@@ -63,6 +63,7 @@ rm -rf ~/.config/kitty/themes/forest.conf
 rm -rf ~/.config/kitty/themes/ocean.conf
 rm -rf ~/.config/kitty/themes/midnight.conf
 rm -rf ~/.config/kitty/themes/dark-neon.conf
+rm -rf ~/.config/kitty/themes/cyberpunk.conf
 
 # If themes directory is empty, remove it
 if [ -d ~/.config/kitty/themes ] && [ -z "$(ls -A ~/.config/kitty/themes)" ]; then
@@ -82,9 +83,28 @@ fi
 if [ -f ~/.bashrc ]; then
     sed -i '/# Cosmic Theme Pack/d' ~/.bashrc
     sed -i '/function cosmic-fetch()/d' ~/.bashrc
+    sed -i '/cosmic-fetch()/d' ~/.bashrc
+    sed -i '/~\/.config\/fastfetch\/run-cosmic.sh/d' ~/.bashrc
     sed -i '/neofetch --config ~\/.config\/neofetch\/config.cosmic.conf/d' ~/.bashrc
-    sed -i '/}/d' ~/.bashrc
     sed -i '/export -f cosmic-fetch/d' ~/.bashrc
+fi
+
+# Remove from .zshrc if present
+if [ -f ~/.zshrc ]; then
+    sed -i '/# Cosmic Theme Pack/d' ~/.zshrc
+    sed -i '/cosmic-fetch()/d' ~/.zshrc
+    sed -i '/~\/.config\/fastfetch\/run-cosmic.sh/d' ~/.zshrc
+fi
+
+# Clean up Fastfetch configurations
+echo -e "${GREEN}Cleaning up Fastfetch configurations...${NC}"
+rm -rf ~/.config/fastfetch/config.jsonc
+rm -rf ~/.config/fastfetch/run-cosmic.sh
+rm -rf ~/.config/fastfetch/logos
+
+# If fastfetch directory is empty, remove it
+if [ -d ~/.config/fastfetch ] && [ -z "$(ls -A ~/.config/fastfetch)" ]; then
+    rmdir ~/.config/fastfetch
 fi
 
 # Clean up empty directories
