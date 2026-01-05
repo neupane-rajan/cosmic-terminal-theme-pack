@@ -63,6 +63,22 @@ fi
 
 # Create directory if it doesn't exist
 mkdir -p ~/.config/fastfetch
+mkdir -p ~/.config/fastfetch/logos
+
+# Copy logo files
+cp fastfetch/logos/*.txt ~/.config/fastfetch/logos/
+
+# Check if kitty.conf exists, create if not
+if [ ! -f ~/.config/kitty/kitty.conf ]; then
+    echo -e "${YELLOW}kitty.conf not found. Creating default configuration...${NC}"
+    mkdir -p ~/.config/kitty
+    echo "# Cosmic Theme Pack" > ~/.config/kitty/kitty.conf
+    echo "include themes/nebula.conf" >> ~/.config/kitty/kitty.conf
+    # Copy themes if they aren't already there (should be done by main installer, but good to ensure)
+    mkdir -p ~/.config/kitty/themes
+    cp themes/kitty/*.conf ~/.config/kitty/themes/
+    echo -e "${GREEN}Created ~/.config/kitty/kitty.conf with default Nebula theme${NC}"
+fi
 
 # Create the shell wrapper to handle themes
 echo -e "${GREEN}Creating Cosmic Fastfetch logic...${NC}"
@@ -75,29 +91,34 @@ cat > ~/.config/fastfetch/run-cosmic.sh << 'EOF'
 
 # Get current theme from kitty config
 get_theme() {
-    if grep -q "include themes/nebula.conf" ~/.config/kitty/kitty.conf; then
-        echo "nebula"
-    elif grep -q "include themes/solar.conf" ~/.config/kitty/kitty.conf; then
-        echo "solar"
-    elif grep -q "include themes/forest.conf" ~/.config/kitty/kitty.conf; then
-        echo "forest"
-    elif grep -q "include themes/ocean.conf" ~/.config/kitty/kitty.conf; then
-        echo "ocean"
-    elif grep -q "include themes/midnight.conf" ~/.config/kitty/kitty.conf; then
-        echo "midnight"
-    elif grep -q "include themes/dark-neon.conf" ~/.config/kitty/kitty.conf; then
-        echo "dark-neon"
-    elif grep -q "include themes/cyberpunk.conf" ~/.config/kitty/kitty.conf; then
-        echo "cyberpunk"
+    if [ -f ~/.config/kitty/kitty.conf ]; then
+        if grep -q "include themes/nebula.conf" ~/.config/kitty/kitty.conf; then
+            echo "nebula"
+        elif grep -q "include themes/solar.conf" ~/.config/kitty/kitty.conf; then
+            echo "solar"
+        elif grep -q "include themes/forest.conf" ~/.config/kitty/kitty.conf; then
+            echo "forest"
+        elif grep -q "include themes/ocean.conf" ~/.config/kitty/kitty.conf; then
+            echo "ocean"
+        elif grep -q "include themes/midnight.conf" ~/.config/kitty/kitty.conf; then
+            echo "midnight"
+        elif grep -q "include themes/dark-neon.conf" ~/.config/kitty/kitty.conf; then
+            echo "dark-neon"
+        elif grep -q "include themes/cyberpunk.conf" ~/.config/kitty/kitty.conf; then
+            echo "cyberpunk"
+        else
+            echo "nebula" # Default if config exists but no theme match
+        fi
     else
-        echo "nebula" # Default
+        echo "nebula" # Default if config doesn't exist (fallback)
     fi
 }
 
 theme=$(get_theme)
 config_file="$HOME/.config/fastfetch/config.jsonc"
+logo_dir="$HOME/.config/fastfetch/logos"
 
-# Define ASCII art and Colors based on theme
+# Define Colors based on theme
 case $theme in
     nebula)
         color="blue"
@@ -133,12 +154,9 @@ case $theme in
         ;;
 esac
 
-# Execute fastfetch with overrides
-# Note: We are running simple fastfetch command here. 
-# For advanced ASCII art similar to the neofetch script, we'd need to create text files or print raw.
-# Fastfetch supports printing raw text files as logos.
-
-fastfetch --config "$config_file" --color "$color" --logo-color "$logo_color"
+# Execute fastfetch with custom logo and colors
+# We use --logo to point to the text file
+fastfetch --config "$config_file" --color "$color" --logo-color "$logo_color" --logo "$logo_dir/${theme}.txt" --logo-type file
 
 EOF
 
